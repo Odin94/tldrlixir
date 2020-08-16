@@ -1,5 +1,6 @@
 defmodule Tldrlixir.LicenseData do
   # Information from https://github.com/eladnava/tldrlegal
+  @spec obligation_info() :: map()
   def obligation_info do
     %{
       giveCredit: %{
@@ -49,58 +50,59 @@ defmodule Tldrlixir.LicenseData do
   end
 
   # Information from tldrlegal.com via https://github.com/eladnava/tldrlegal
-  def license_obligations do
+  @spec obligations_by_license() :: map()
+  def obligations_by_license do
     %{
-      "MIT" => %{
-        includeLicense: true,
-        includeCopyright: true
-      },
-      "ISC" => %{
-        includeLicense: true,
-        includeCopyright: true
-      },
-      "Apache 2.0" => %{
-        stateChanges: true,
-        includeNotice: true,
-        includeLicense: true,
-        includeCopyright: true
-      },
-      "AFL 3.0" => %{
-        includeOriginal: true,
-        discloseSource: true,
-        includeCopyright: true
-      },
-      "BSD 2 Clause" => %{
-        includeLicense: true,
-        includeCopyright: true
-      },
-      "BSD 3 Clause" => %{
-        includeLicense: true,
-        includeCopyright: true
-      },
-      "BSD 4 Clause" => %{
-        giveCredit: true,
-        includeLicense: true,
-        includeCopyright: true
-      },
-      "GPL 2.0" => %{
-        stateChanges: true,
-        includeLicense: true,
-        discloseSource: true,
-        includeOriginal: true,
-        includeCopyright: true
-      },
-      "WTFPL" => %{
-        rename: true
-      },
-      "CC BY 4.0" => %{
-        giveCredit: true,
-        stateChanges: true,
-        includeCopyright: true
-      },
-      "CC0" => %{},
-      "Public Domain" => %{},
-      "Unlicense" => %{}
+      "MIT" => [
+        "includeLicense",
+        "includeCopyright"
+      ],
+      "ISC" => [
+        "includeLicense",
+        "includeCopyright"
+      ],
+      "Apache 2.0" => [
+        "stateChanges",
+        "includeNotice",
+        "includeLicense",
+        "includeCopyright"
+      ],
+      "AFL 3.0" => [
+        "includeOriginal",
+        "discloseSource",
+        "includeCopyright"
+      ],
+      "BSD 2 Clause" => [
+        "includeLicense",
+        "includeCopyright"
+      ],
+      "BSD 3 Clause" => [
+        "includeLicense",
+        "includeCopyright"
+      ],
+      "BSD 4 Clause" => [
+        "giveCredit",
+        "includeLicense",
+        "includeCopyright"
+      ],
+      "GPL 2.0" => [
+        "stateChanges",
+        "includeLicense",
+        "discloseSource",
+        "includeOriginal",
+        "includeCopyright"
+      ],
+      "WTFPL" => [
+        "rename"
+      ],
+      "CC BY 4.0" => [
+        "giveCredit",
+        "stateChanges",
+        "includeCopyright"
+      ],
+      "CC0" => [],
+      "Public Domain" => [],
+      "Unlicense" => []
     }
   end
 end
