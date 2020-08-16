@@ -1,0 +1,4 @@
+%{
+  "licensir": {:hex, :licensir, "0.6.1", "c9c5d421ed6387c173fa8adcc1467b84404aa74a066f695db70d8e9ebf55ac6a", [:mix], [], "hexpm", "ccfe21b2371f04774e27a7260be778a79e02c5f5be1429e9cfcc3c7b87c3ba9e"},
+  "stdout_formatter": {:hex, :stdout_formatter, "0.2.4", "d9394ab3f5adcda97a4b8b1c0b798dcb286b07913c4020ea7f78c88723fb145e", [:mix, :rebar3], [], "hexpm", "51f1df921b0477275ea712763042155dbc74acc75d9648dbd54985c45c913b29"},
+}
