@@ -3,47 +3,47 @@ defmodule Tldrlixir.LicenseData do
   @spec obligation_infos() :: map()
   def obligation_infos do
     %{
-      giveCredit: %{
+      "giveCredit" => %{
         title: "Give Credit",
-        desc:
+        description:
           "You must display an acknowledgement in all advertising materials mentioning features or use of these packages."
       },
-      stateChanges: %{
+      "stateChanges" => %{
         title: "State Changes",
-        desc: "You must state significant changes made to these packages."
+        description: "You must state significant changes made to these packages."
       },
-      discloseSource: %{
+      "discloseSource" => %{
         title: "Disclose Source",
-        desc: "You must disclose your source code when you distribute your software."
+        description: "You must disclose your source code when you distribute your software."
       },
-      includeOriginal: %{
+      "includeOriginal" => %{
         title: "Include Original",
-        desc:
+        description:
           "You must distribute copies of these original packages or instructions to obtain copies with your software."
       },
-      rename: %{
+      "rename" => %{
         title: "Rename (If License Modified)",
-        desc: "You must rename these packages licenses if you change their terms."
+        description: "You must rename these packages licenses if you change their terms."
       },
-      includeLicense: %{
+      "includeLicense" => %{
         # Only warn about this obligation in closed-source mode
         closedSourceOnly: true,
         title: "Include License",
-        desc:
+        description:
           "You must include the license notice in all copies or substantial uses of these packages."
       },
-      includeCopyright: %{
+      "includeCopyright" => %{
         # Only warn about this obligation in closed-source mode
         closedSourceOnly: true,
         title: "Include Copyright",
-        desc:
+        description:
           "You must include the copyright notice in all copies or substantial uses of these packages."
       },
-      includeNotice: %{
+      "includeNotice" => %{
         # Only warn about this obligation in closed-source mode
         closedSourceOnly: true,
         title: "Include Notice",
-        desc:
+        description:
           "If these packages have a 'NOTICE' file with attribution notes, you must include that NOTICE when you distribute. You may append to these NOTICE files."
       }
     }
