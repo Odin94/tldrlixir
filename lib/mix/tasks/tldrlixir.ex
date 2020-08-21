@@ -51,7 +51,7 @@ defmodule Mix.Tasks.Tldrlixir do
     summary =
       names_licenses_by_obligation
       |> Enum.map(fn {obligation, names_licenses} ->
-        "#{obligation}: #{Enum.count(names_licenses)} packages"
+        "#{Map.get(infos, obligation, %{title: obligation}).title}: #{Enum.count(names_licenses)} packages"
       end)
       |> Enum.join("\n")
 
@@ -59,7 +59,8 @@ defmodule Mix.Tasks.Tldrlixir do
       names_licenses_by_obligation
       |> Enum.filter(fn {obligation, _} -> Map.has_key?(infos, obligation) end)
       |> Enum.map(fn {obligation, names_licenses} ->
-        header = "#{Map.get(infos, obligation).title}\n#{Map.get(infos, obligation).description}\n----------------\n"
+        header =
+          "#{Map.get(infos, obligation).title}\n#{Map.get(infos, obligation).description}\n----------------\n"
 
         content =
           names_licenses
