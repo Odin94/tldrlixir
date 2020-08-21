@@ -16,8 +16,8 @@ defmodule Mix.Tasks.Tldrlixir do
     Licensir.Scanner.scan(opts)
     |> Enum.map(&extract_name_and_license/1)
     |> Enum.map(fn %{name: name, license: license} -> {name, license, to_obligations(license)} end)
-    |> add_obligation_counts()
-    |> add_obligation_description()
+    |> to_names_licenses_by_obligation()
+    # |> to_output_string()
     |> IO.inspect()
   end
 
@@ -31,33 +31,36 @@ defmodule Mix.Tasks.Tldrlixir do
     |> Map.get(license_name, ["uncertain license - not sure what to do"])
   end
 
-  @spec add_obligation_counts(any) :: %{
-          names_and_licenses: list(name_and_license),
-          obligations: map()
-        }
-  defp add_obligation_counts(names_and_licenses) do
-    obligations =
-      names_and_licenses
-      |> Enum.flat_map(fn {_, _, obligations} -> obligations end)
-      |> Enum.reduce(%{}, fn obligation, acc ->
-        Map.update(acc, obligation, 1, &(&1 + 1))
-      end)
+  defp to_names_licenses_by_obligation(names_licenses_obligations) do
+    # obligation => [{name, license}]
+    # later: get count by counting entries for each obligation
 
-    %{names_and_licenses: names_and_licenses, obligations: obligations}
+    names_licenses_obligations
+    |> Enum.flat_map(fn {name, license, obligations} ->
+      obligations
+      |> Enum.map(fn obligation -> {obligation, {name, license}} end)
+    end)
+    |> Enum.reduce(%{}, fn {obligation, name_license}, acc ->
+      Map.update(acc, obligation, [name_license], &Enum.concat(&1, [name_license]))
+    end)
   end
 
-  defp add_obligation_description(%{obligations: obligations} = input) do
-    descriptions =
-      Tldrlixir.LicenseData.obligation_infos()
-      |> Enum.reduce([], fn {key, info}, acc ->
-        if Map.has_key?(obligations, key) do
-          [{key, %{info: info, count: Map.get(obligations, key)}} | acc]
-        else
-          acc
-        end
-      end)
-      |> Enum.into(%{})
+  # defp to_output_string(names_licenses_by_obligation) do
+  #   summary =
+  #     names_licenses_by_obligation
+  #     |> Enum.map(fn {obligation, names_licenses} ->
+  #       "#{obligation}: #{Enum.count(names_licenses)} packages"
+  #     end)
+  #     |> Enum.join("\n")
 
-    {input, descriptions}
-  end
+  #   details =
+  #     names_licenses_by_obligation
+  #     |> Enum.map(fn {obligation, names_licenses} ->
+  #       names_licenses
+  #       |> Enum.map()
+  #     end)
+  #     |> Enum.join("\n\n\n")
+
+  #   "#{summary}\n\n\n#{details}"
+  # end
 end
