@@ -1,7 +1,7 @@
 defmodule Tldrlixir.LicenseData do
   # Information from https://github.com/eladnava/tldrlegal
-  @spec obligation_info() :: map()
-  def obligation_info do
+  @spec obligation_infos() :: map()
+  def obligation_infos do
     %{
       giveCredit: %{
         title: "Give Credit",
