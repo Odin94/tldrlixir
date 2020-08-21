@@ -17,6 +17,7 @@ defmodule Mix.Tasks.Tldrlixir do
     |> Enum.map(&extract_name_and_license/1)
     |> Enum.map(fn %{name: name, license: license} -> {name, license, to_obligations(license)} end)
     |> add_obligation_counts()
+    |> add_obligation_description()
     |> IO.inspect()
   end
 
@@ -26,9 +27,8 @@ defmodule Mix.Tasks.Tldrlixir do
 
   @spec to_obligations(String.t()) :: String.t()
   defp to_obligations(license_name) do
-    obligations_by_license = Tldrlixir.LicenseData.obligations_by_license()
-
-    Map.get(obligations_by_license, license_name, ["uncertain license - not sure what to do"])
+    Tldrlixir.LicenseData.obligations_by_license()
+    |> Map.get(license_name, ["uncertain license - not sure what to do"])
   end
 
   @spec add_obligation_counts(any) :: %{
@@ -39,8 +39,25 @@ defmodule Mix.Tasks.Tldrlixir do
     obligations =
       names_and_licenses
       |> Enum.flat_map(fn {_, _, obligations} -> obligations end)
-      |> Enum.reduce(%{}, fn obligation, acc -> Map.update(acc, obligation, 1, &(&1 + 1)) end)
+      |> Enum.reduce(%{}, fn obligation, acc ->
+        Map.update(acc, obligation, 1, &(&1 + 1))
+      end)
 
     %{names_and_licenses: names_and_licenses, obligations: obligations}
+  end
+
+  defp add_obligation_description(%{obligations: obligations} = input) do
+    descriptions =
+      Tldrlixir.LicenseData.obligation_infos()
+      |> Enum.reduce([], fn {key, info}, acc ->
+        if Map.has_key?(obligations, key) do
+          [{key, %{info: info, count: Map.get(obligations, key)}} | acc]
+        else
+          acc
+        end
+      end)
+      |> Enum.into(%{})
+
+    {input, descriptions}
   end
 end
