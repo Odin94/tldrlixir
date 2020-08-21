@@ -17,8 +17,8 @@ defmodule Mix.Tasks.Tldrlixir do
     |> Enum.map(&extract_name_and_license/1)
     |> Enum.map(fn %{name: name, license: license} -> {name, license, to_obligations(license)} end)
     |> to_names_licenses_by_obligation()
-    # |> to_output_string()
-    |> IO.inspect()
+    |> to_output_string()
+    |> IO.puts()
   end
 
   @spec extract_name_and_license(License.t()) :: name_and_license
@@ -45,22 +45,30 @@ defmodule Mix.Tasks.Tldrlixir do
     end)
   end
 
-  # defp to_output_string(names_licenses_by_obligation) do
-  #   summary =
-  #     names_licenses_by_obligation
-  #     |> Enum.map(fn {obligation, names_licenses} ->
-  #       "#{obligation}: #{Enum.count(names_licenses)} packages"
-  #     end)
-  #     |> Enum.join("\n")
+  defp to_output_string(names_licenses_by_obligation) do
+    infos = Tldrlixir.LicenseData.obligation_infos()
 
-  #   details =
-  #     names_licenses_by_obligation
-  #     |> Enum.map(fn {obligation, names_licenses} ->
-  #       names_licenses
-  #       |> Enum.map()
-  #     end)
-  #     |> Enum.join("\n\n\n")
+    summary =
+      names_licenses_by_obligation
+      |> Enum.map(fn {obligation, names_licenses} ->
+        "#{obligation}: #{Enum.count(names_licenses)} packages"
+      end)
+      |> Enum.join("\n")
 
-  #   "#{summary}\n\n\n#{details}"
-  # end
+    details =
+      names_licenses_by_obligation
+      |> Enum.filter(fn {obligation, _} -> Map.has_key?(infos, obligation) end)
+      |> Enum.map(fn {obligation, names_licenses} ->
+        header = "#{Map.get(infos, obligation).title}\n#{Map.get(infos, obligation).description}\n----------------\n"
+
+        content =
+          names_licenses
+          |> Enum.map(fn {name, license} -> "#{name}  -  #{license}" end)
+
+        "#{header}\n#{content}"
+      end)
+      |> Enum.join("\n\n\n")
+
+    "#{summary}\n\n\n#{details}"
+  end
 end
